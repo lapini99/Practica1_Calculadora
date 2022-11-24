@@ -4,6 +4,8 @@
  */
 package practica1_calculadora;
 
+import java.util.Optional;
+import static java.util.Optional.ofNullable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,10 +14,13 @@ import java.util.regex.Pattern;
  * @author alela
  */
 public class NewJFrame extends javax.swing.JFrame {
-
-    /**
-     * Creates new form NewJFrame
-     */
+    private double firstNum;
+    private double secondNum;
+    private double total;
+    
+    private String operator;
+    private String totalResult;
+            
     public NewJFrame() {
         initComponents();
     }
@@ -191,6 +196,11 @@ public class NewJFrame extends javax.swing.JFrame {
 
         btnBorrar.setBackground(new java.awt.Color(204, 204, 204));
         btnBorrar.setText("Borrar");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
 
         btnReset.setBackground(new java.awt.Color(204, 204, 204));
         btnReset.setText("CE");
@@ -339,23 +349,31 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDotActionPerformed
 
     private void btnSumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSumActionPerformed
-        etiResultado.setText(etiResultado.getText() + "+");
+       firstNum = Double.parseDouble(etiResultado.getText());
+       etiResultado.setText("");
+       operator = "+";
     }//GEN-LAST:event_btnSumActionPerformed
 
     private void btnMenosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenosActionPerformed
-        etiResultado.setText(etiResultado.getText() + "-");
+       firstNum = Double.parseDouble(etiResultado.getText());
+       etiResultado.setText("");
+       operator = "-";
     }//GEN-LAST:event_btnMenosActionPerformed
 
     private void btnMultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultActionPerformed
-        etiResultado.setText(etiResultado.getText() + "x");
+       firstNum = Double.parseDouble(etiResultado.getText());
+       etiResultado.setText("");
+       operator = "x";
     }//GEN-LAST:event_btnMultActionPerformed
 
     private void btnDivActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDivActionPerformed
-        etiResultado.setText(etiResultado.getText() + "÷");
+       firstNum = Double.parseDouble(etiResultado.getText());
+       etiResultado.setText("");
+       operator = "÷";
     }//GEN-LAST:event_btnDivActionPerformed
 
     private boolean ValidateString() {
-        String regex = "^\\s*([-+]?)(\\d+)(?:\\s*([-+*\\/])\\s*((?:\\s[-+])?\\d+)\\s*)+$"; //regex valida que solo haya digitos y operandos
+        String regex = "^[\\d\\+\\/\\*\\.\\- \\(\\)]*$"; //regex valida que solo haya digitos y operandos
         Pattern pat = Pattern.compile(regex);
         Matcher mat = pat.matcher(etiResultado.getText());
         
@@ -369,11 +387,42 @@ public class NewJFrame extends javax.swing.JFrame {
     
     private void btnIgualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIgualActionPerformed
         ValidateString();
+        secondNum = Double.parseDouble(etiResultado.getText());
+        switch(operator) {  //maquina de estados que realiza un cálculo u otro segun el valor de operator
+            case "+":
+                total = firstNum + secondNum;
+                totalResult = String.valueOf(total);
+                break;
+            case "-":
+                total = firstNum - secondNum;
+                totalResult = String.valueOf(total);
+                break;
+            case "x":
+                total = firstNum * secondNum;
+                totalResult = String.valueOf(total);
+                break;
+            case "÷":
+                total = firstNum / secondNum;
+                totalResult = String.valueOf(total);
+                break;
+        }
+        etiResultado.setText(totalResult);
     }//GEN-LAST:event_btnIgualActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        etiResultado.setText("");
+        etiResultado.setText(""); //borra todo lo escrito
     }//GEN-LAST:event_btnResetActionPerformed
+
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        String result; //borra el último caracter del String
+        String text = etiResultado.getText();
+        if(text.length() > 0) {
+        StringBuilder eraser = new StringBuilder(text);
+        eraser.deleteCharAt(text.length()-1);
+        result = eraser.toString();
+        etiResultado.setText(result);
+        }
+    }//GEN-LAST:event_btnBorrarActionPerformed
 
     /**
      * @param args the command line arguments
