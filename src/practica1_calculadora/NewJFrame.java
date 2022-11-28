@@ -4,10 +4,17 @@
  */
 package practica1_calculadora;
 
+import BaseDatos.ConexionMySQL;
+import com.mysql.jdbc.Statement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Optional;
 import static java.util.Optional.ofNullable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
+import java.sql.Timestamp;
 
 /**
  *
@@ -34,6 +41,8 @@ public class NewJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        dialogoBD = new javax.swing.JDialog();
+        consultaBD = new javax.swing.JScrollPane();
         etiResultado = new javax.swing.JLabel();
         btn9 = new javax.swing.JButton();
         btn7 = new javax.swing.JButton();
@@ -54,6 +63,28 @@ public class NewJFrame extends javax.swing.JFrame {
         btnSum = new javax.swing.JButton();
         btnBorrar = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
+        barraMenus = new javax.swing.JMenuBar();
+        menuArchivo = new javax.swing.JMenu();
+        menuItemSalir = new javax.swing.JMenuItem();
+        menuBD = new javax.swing.JMenu();
+        menuItemHistorial = new javax.swing.JMenuItem();
+
+        javax.swing.GroupLayout dialogoBDLayout = new javax.swing.GroupLayout(dialogoBD.getContentPane());
+        dialogoBD.getContentPane().setLayout(dialogoBDLayout);
+        dialogoBDLayout.setHorizontalGroup(
+            dialogoBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dialogoBDLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(consultaBD, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        dialogoBDLayout.setVerticalGroup(
+            dialogoBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dialogoBDLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(consultaBD, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(221, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(153, 153, 153));
@@ -210,6 +241,32 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
 
+        menuArchivo.setText("Archivo");
+
+        menuItemSalir.setText("Salir");
+        menuItemSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemSalirActionPerformed(evt);
+            }
+        });
+        menuArchivo.add(menuItemSalir);
+
+        barraMenus.add(menuArchivo);
+
+        menuBD.setText("Base de datos");
+
+        menuItemHistorial.setText("Historial");
+        menuItemHistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemHistorialActionPerformed(evt);
+            }
+        });
+        menuBD.add(menuItemHistorial);
+
+        barraMenus.add(menuBD);
+
+        setJMenuBar(barraMenus);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -261,7 +318,7 @@ public class NewJFrame extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(51, Short.MAX_VALUE)
+                .addContainerGap(28, Short.MAX_VALUE)
                 .addComponent(etiResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -385,6 +442,34 @@ public class NewJFrame extends javax.swing.JFrame {
             return false;}
     }
     
+    private void InsertSQL() {
+        ConexionMySQL cc = new ConexionMySQL();
+        Connection cn = cc.connect();
+        
+        String vId = null; //le asigno el valor null ya que la db lo rellena automaticamente
+        String vDate = null; //le asigno el valor null ya que la db lo rellena automaticamente
+        String vResult = String.valueOf(firstNum) + operator + String.valueOf(secondNum) + " = " + etiResultado.getText(); //string que se va a insertar en la col resultado
+        
+        String SQL = "INSERT INTO operations(id, date, operation) VALUES (?, ?, ?)"; //comando SQL
+        
+        try {
+            PreparedStatement pst = cn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+            
+            pst.setString(1, vId);
+            pst.setString(2, vDate);
+            pst.setString(3, vResult);
+         
+            int n = pst.executeUpdate();
+            if (n > 0) {
+                JOptionPane.showMessageDialog(null, "Inserción satisfactoria");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+            System.out.println(ex);
+        }
+        
+    }
+    
     private void btnIgualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIgualActionPerformed
         ValidateString();
         secondNum = Double.parseDouble(etiResultado.getText());
@@ -407,6 +492,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 break;
         }
         etiResultado.setText(totalResult);
+        InsertSQL();
     }//GEN-LAST:event_btnIgualActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
@@ -423,6 +509,16 @@ public class NewJFrame extends javax.swing.JFrame {
         etiResultado.setText(result);
         }
     }//GEN-LAST:event_btnBorrarActionPerformed
+
+    private void menuItemSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSalirActionPerformed
+        System.exit(0); //cierra el programa
+    }//GEN-LAST:event_menuItemSalirActionPerformed
+
+    private void menuItemHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemHistorialActionPerformed
+        dialogoBD.setSize(500,500);
+        dialogoBD.setLocation(100, 100);
+        dialogoBD.setVisible(true);
+    }//GEN-LAST:event_menuItemHistorialActionPerformed
 
     /**
      * @param args the command line arguments
@@ -460,6 +556,7 @@ public class NewJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuBar barraMenus;
     private javax.swing.JButton btn0;
     private javax.swing.JButton btn00;
     private javax.swing.JButton btn1;
@@ -479,6 +576,12 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnMult;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSum;
+    private javax.swing.JScrollPane consultaBD;
+    private javax.swing.JDialog dialogoBD;
     private javax.swing.JLabel etiResultado;
+    private javax.swing.JMenu menuArchivo;
+    private javax.swing.JMenu menuBD;
+    private javax.swing.JMenuItem menuItemHistorial;
+    private javax.swing.JMenuItem menuItemSalir;
     // End of variables declaration//GEN-END:variables
 }
