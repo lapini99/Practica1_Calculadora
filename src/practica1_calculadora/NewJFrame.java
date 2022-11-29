@@ -47,7 +47,10 @@ public class NewJFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         dialogoBD = new javax.swing.JDialog();
-        tblRegister = new javax.swing.JScrollPane();
+        JScrollPane1 = new javax.swing.JScrollPane();
+        tblRegister = new javax.swing.JTable();
+        btnRefrescar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         etiResultado = new javax.swing.JLabel();
         btn9 = new javax.swing.JButton();
         btn7 = new javax.swing.JButton();
@@ -74,21 +77,55 @@ public class NewJFrame extends javax.swing.JFrame {
         menuBD = new javax.swing.JMenu();
         menuItemHistorial = new javax.swing.JMenuItem();
 
+        tblRegister.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        JScrollPane1.setViewportView(tblRegister);
+
+        btnRefrescar.setText("Refrescar");
+        btnRefrescar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefrescarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setText("Eliminar");
+
         javax.swing.GroupLayout dialogoBDLayout = new javax.swing.GroupLayout(dialogoBD.getContentPane());
         dialogoBD.getContentPane().setLayout(dialogoBDLayout);
         dialogoBDLayout.setHorizontalGroup(
             dialogoBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dialogoBDLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tblRegister, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(dialogoBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(dialogoBDLayout.createSequentialGroup()
+                        .addComponent(JScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(dialogoBDLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnRefrescar)
+                        .addGap(69, 69, 69)
+                        .addComponent(btnEliminar)
+                        .addGap(96, 96, 96))))
         );
         dialogoBDLayout.setVerticalGroup(
             dialogoBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dialogoBDLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tblRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(221, Short.MAX_VALUE))
+                .addComponent(JScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(dialogoBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRefrescar)
+                    .addComponent(btnEliminar))
+                .addContainerGap(113, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -549,6 +586,10 @@ public class NewJFrame extends javax.swing.JFrame {
         dialogoBD.setVisible(true);
     }//GEN-LAST:event_menuItemHistorialActionPerformed
 
+    private void btnRefrescarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefrescarActionPerformed
+        queryOperations();
+    }//GEN-LAST:event_btnRefrescarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -585,6 +626,7 @@ public class NewJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane JScrollPane1;
     private javax.swing.JMenuBar barraMenus;
     private javax.swing.JButton btn0;
     private javax.swing.JButton btn00;
@@ -600,9 +642,11 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnDiv;
     private javax.swing.JButton btnDot;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnIgual;
     private javax.swing.JButton btnMenos;
     private javax.swing.JButton btnMult;
+    private javax.swing.JButton btnRefrescar;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSum;
     private javax.swing.JDialog dialogoBD;
@@ -611,7 +655,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JMenu menuBD;
     private javax.swing.JMenuItem menuItemHistorial;
     private javax.swing.JMenuItem menuItemSalir;
-    private javax.swing.JScrollPane tblRegister;
+    private javax.swing.JTable tblRegister;
     // End of variables declaration//GEN-END:variables
 
 
