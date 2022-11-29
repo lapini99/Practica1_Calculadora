@@ -9,27 +9,32 @@ import com.mysql.jdbc.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Optional;
-import static java.util.Optional.ofNullable;
+import java.sql.ResultSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
-import java.sql.Timestamp;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author alela
  */
 public class NewJFrame extends javax.swing.JFrame {
+   
     private double firstNum;
     private double secondNum;
     private double total;
     
     private String operator;
     private String totalResult;
+    
+    String SQL = new String();
+    DefaultTableModel model;
+    String[] register = new String[3];
             
     public NewJFrame() {
         initComponents();
+        queryOperations();
     }
 
     /**
@@ -42,7 +47,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         dialogoBD = new javax.swing.JDialog();
-        consultaBD = new javax.swing.JScrollPane();
+        tblRegister = new javax.swing.JScrollPane();
         etiResultado = new javax.swing.JLabel();
         btn9 = new javax.swing.JButton();
         btn7 = new javax.swing.JButton();
@@ -75,14 +80,14 @@ public class NewJFrame extends javax.swing.JFrame {
             dialogoBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dialogoBDLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(consultaBD, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                .addComponent(tblRegister, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
                 .addContainerGap())
         );
         dialogoBDLayout.setVerticalGroup(
             dialogoBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dialogoBDLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(consultaBD, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tblRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(221, Short.MAX_VALUE))
         );
 
@@ -356,6 +361,30 @@ public class NewJFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void queryOperations() {
+        String[] operations = {"ID", "FECHA", "OPERACION"};
+        model = new DefaultTableModel(null, operations);
+        ConexionMySQL cc = new ConexionMySQL();
+        Connection cn = (Connection) cc.connect();
+        
+        SQL = "SELECT id, date, operation from operations";
+        
+        try{
+            Statement st = (Statement) cn.createStatement();
+            ResultSet rs = st.executeQuery(SQL);
+            while(rs.next()) {
+                register[0] = rs.getString("id");
+                register[1] = rs.getString("date");
+                register[2] = rs.getString("operation");
+                model.addRow(register);
+            }
+       
+            tblRegister.setModel(model);
+        
+        }catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
     private void btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn1ActionPerformed
 
         etiResultado.setText(etiResultado.getText() + "1");
@@ -576,12 +605,14 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnMult;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSum;
-    private javax.swing.JScrollPane consultaBD;
     private javax.swing.JDialog dialogoBD;
     private javax.swing.JLabel etiResultado;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenu menuBD;
     private javax.swing.JMenuItem menuItemHistorial;
     private javax.swing.JMenuItem menuItemSalir;
+    private javax.swing.JScrollPane tblRegister;
     // End of variables declaration//GEN-END:variables
+
+
 }
