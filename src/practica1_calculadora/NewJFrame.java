@@ -51,6 +51,8 @@ public class NewJFrame extends javax.swing.JFrame {
         tblRegister = new javax.swing.JTable();
         btnRefrescar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
+        mnuEditar = new javax.swing.JPopupMenu();
+        iteEliminar = new javax.swing.JMenuItem();
         etiResultado = new javax.swing.JLabel();
         btn9 = new javax.swing.JButton();
         btn7 = new javax.swing.JButton();
@@ -88,6 +90,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
             }
         ));
+        tblRegister.setComponentPopupMenu(mnuEditar);
         JScrollPane1.setViewportView(tblRegister);
 
         btnRefrescar.setText("Refrescar");
@@ -98,6 +101,11 @@ public class NewJFrame extends javax.swing.JFrame {
         });
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout dialogoBDLayout = new javax.swing.GroupLayout(dialogoBD.getContentPane());
         dialogoBD.getContentPane().setLayout(dialogoBDLayout);
@@ -127,6 +135,14 @@ public class NewJFrame extends javax.swing.JFrame {
                     .addComponent(btnEliminar))
                 .addContainerGap(113, Short.MAX_VALUE))
         );
+
+        iteEliminar.setText("Eliminar");
+        iteEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                iteEliminarActionPerformed(evt);
+            }
+        });
+        mnuEditar.add(iteEliminar);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(153, 153, 153));
@@ -590,6 +606,41 @@ public class NewJFrame extends javax.swing.JFrame {
         queryOperations();
     }//GEN-LAST:event_btnRefrescarActionPerformed
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        ConexionMySQL cc = new ConexionMySQL();
+        Connection cn = cc.connect(); 
+        
+        String vId = String.valueOf(tblRegister.getSelectedRow());
+        String vSQL = "DELETE from WHERE id='" + vId + "'";
+        
+        try {
+            PreparedStatement pst = cn.prepareStatement(vSQL);
+            int n = pst.executeUpdate();
+            if (n > 0) {
+                JOptionPane.showMessageDialog(null,"Eliminación satisfactoria");
+                this.queryOperations(); }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,ex);
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void iteEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iteEliminarActionPerformed
+        int rowSel;
+        String vId;
+        
+        try {
+            rowSel = tblRegister.getSelectedRow();
+            if (rowSel == -1) {
+                JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila");
+            } else {
+                DefaultTableModel model = (DefaultTableModel) tblRegister.getModel();
+                vId = (String) model.getValueAt(rowSel, 0);
+            }
+        } catch (Exception ex){
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }//GEN-LAST:event_iteEliminarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -651,10 +702,12 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnSum;
     private javax.swing.JDialog dialogoBD;
     private javax.swing.JLabel etiResultado;
+    private javax.swing.JMenuItem iteEliminar;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenu menuBD;
     private javax.swing.JMenuItem menuItemHistorial;
     private javax.swing.JMenuItem menuItemSalir;
+    private javax.swing.JPopupMenu mnuEditar;
     private javax.swing.JTable tblRegister;
     // End of variables declaration//GEN-END:variables
 

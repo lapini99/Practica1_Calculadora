@@ -16,6 +16,5 @@ public class Practica1_Calculadora {
     public static void main(String[] args) {
         NewJFrame obj = new NewJFrame();
         obj.setVisible(true);
-    }
-    
+    }   
 }
