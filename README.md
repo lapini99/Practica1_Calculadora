@@ -5,7 +5,7 @@
 En este proyecto vamos a relizar una calculadora funcional con **Java Swing**. El IDE elegido para el desarrollo es **NetBeans**. 
 
 El enfoque que he tomado para el desarrollo es el de realizar una calculadora simple que pueda utilizar cualquier usuario, una calculadora *"standard"* o clásica. 
-![calculadora-clásica](.\images\calculadora-clasica.png)
+![calculadora-clásica](./images/calculadora-clasica.png)
 
 Podemos realizar calculos sencillos (versión 0.1). El uso es similar al de una clásica calculadora física. Estas calculadoras funcionan de la siguiente manera:
 - El usuario inserte el primer número que desea calcular
@@ -16,7 +16,7 @@ Estas son las funcionalidades principales y el objetivo de este proyecto. Más a
 
 ## **Metodología de desarrollo**
 
-![metodologia-agil](images\metodologia-agil.png)
+![metodologia-agil](./images/metodologia-agil.png)
 He elegido como metodología cascada. ¿Por qué cascada y no espiral? He elegido esta metodología ya que es un proyecto corto con claras etapas de desarrollo. La otra metodología que me había planteado era espiral, pero esta está más enfocada a grandes proyectos. Este trabajo no requiere de un largo nivel de iteraciones.
 
 ¿En qué consiste la metodología de desarrollo en cascada? Es una metodología de desarrollo de tipo tradicional. Se basa en seguir unas
