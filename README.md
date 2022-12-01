@@ -52,3 +52,34 @@ Solo se entra en la fase de verificación cuando el software ya cumple su objeti
 ### ***Mantenimiento***
 
 En la fase de mantenimiento es donde solo esperamos para correcciones de problemas nuevos y la introducción de otras funcionalidades del software. En el caso de tener que modificar el software, se entraría en un nuevo ciclo de cascada que empieza de cero con los nuevos objetivos.
+
+## **Interfaz**
+
+Para el diseño de la interfaz he seguido las siguientes fases.
+
+![fases-diseño](./images/fases-dise%C3%B1o.png)
+
+### ***Sketch***
+
+En la fase de Sketch he realizado varios bocetos a papel y boli. He ido haciendo bocetos hasta llegar a un diseño viable, limpio, comprensible y moderno.
+
+![sketch-1](./images/sketch-1.jpeg)
+
+![skecth-2](./images/skecth-2.jpeg)
+
+La inspiración, por llamarlo de alguna manera, para el diseño me la dió la calculadora de mi OnePlus. Esta calculadora tiene un diseño sencillo, intuitivo y elegante.
+
+### ***Wireframe***
+
+Un wireframe es una ilustración bidimensional de la interfaz de una página o una aplicación que se centra específicamente en la asignación de espacio y priorización del contenido, las funcionalidades disponibles, y los comportamientos deseados.
+
+En el desarrollo de esta app no realicé ningún wireframe en alguna app, directamente hice el diseño de la calculadora en un JForm, utilizando labels, buttons y demás a modo de wireframe. 
+
+![prototipo](./images/wireframe.png)
+
+### ***MockUp***
+
+El MockUp una composición gráfica completa que ha utilizado el wireframe como plantilla introduciendo todos los elementos gráficos y visuales, convirtiéndose así en un modelo a escala de un producto que se utiliza para demostrar y probar un diseño. El mockup es un medio de representación de la apariencia del producto, y muestra los fundamentos de su funcionalidad. Los MockUp incluyen los detalles visuales, tales como colores, tipografía, etc., y son generalmente estáticas. Al observar un mockup, se debe tener una buena idea de cómo se verá el producto final y una idea aproximada de cómo podría funcionar (incluso si las funciones aún no se han desarrollado).
+
+![calculadora-oneplus](./images/mockup.png)
+

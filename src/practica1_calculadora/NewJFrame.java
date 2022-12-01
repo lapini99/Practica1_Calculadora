@@ -6,6 +6,7 @@ package practica1_calculadora;
 
 import BaseDatos.ConexionMySQL;
 import com.mysql.jdbc.Statement;
+import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -50,7 +51,6 @@ public class NewJFrame extends javax.swing.JFrame {
         JScrollPane1 = new javax.swing.JScrollPane();
         tblRegister = new javax.swing.JTable();
         btnRefrescar = new javax.swing.JButton();
-        btnEliminar = new javax.swing.JButton();
         mnuEditar = new javax.swing.JPopupMenu();
         iteEliminar = new javax.swing.JMenuItem();
         etiResultado = new javax.swing.JLabel();
@@ -100,40 +100,27 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
 
-        btnEliminar.setText("Eliminar");
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout dialogoBDLayout = new javax.swing.GroupLayout(dialogoBD.getContentPane());
         dialogoBD.getContentPane().setLayout(dialogoBDLayout);
         dialogoBDLayout.setHorizontalGroup(
             dialogoBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dialogoBDLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(dialogoBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(dialogoBDLayout.createSequentialGroup()
-                        .addComponent(JScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(dialogoBDLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnRefrescar)
-                        .addGap(69, 69, 69)
-                        .addComponent(btnEliminar)
-                        .addGap(96, 96, 96))))
+                .addComponent(JScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(dialogoBDLayout.createSequentialGroup()
+                .addGap(156, 156, 156)
+                .addComponent(btnRefrescar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         dialogoBDLayout.setVerticalGroup(
             dialogoBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dialogoBDLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(JScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(dialogoBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRefrescar)
-                    .addComponent(btnEliminar))
-                .addContainerGap(113, Short.MAX_VALUE))
+                .addComponent(JScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
+                .addGap(27, 27, 27)
+                .addComponent(btnRefrescar)
+                .addGap(29, 29, 29))
         );
 
         iteEliminar.setText("Eliminar");
@@ -549,7 +536,6 @@ public class NewJFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, ex);
             System.out.println(ex);
         }
-        
     }
     
     private void btnIgualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIgualActionPerformed
@@ -606,28 +592,13 @@ public class NewJFrame extends javax.swing.JFrame {
         queryOperations();
     }//GEN-LAST:event_btnRefrescarActionPerformed
 
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        ConexionMySQL cc = new ConexionMySQL();
-        Connection cn = cc.connect(); 
-        
-        String vId = String.valueOf(tblRegister.getSelectedRow());
-        String vSQL = "DELETE from WHERE id='" + vId + "'";
-        
-        try {
-            PreparedStatement pst = cn.prepareStatement(vSQL);
-            int n = pst.executeUpdate();
-            if (n > 0) {
-                JOptionPane.showMessageDialog(null,"Eliminación satisfactoria");
-                this.queryOperations(); }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null,ex);
-        }
-    }//GEN-LAST:event_btnEliminarActionPerformed
-
     private void iteEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iteEliminarActionPerformed
+        ConexionMySQL cc = new ConexionMySQL();
+        Connection cn = cc.connect();
+
         int rowSel;
         String vId;
-        
+
         try {
             rowSel = tblRegister.getSelectedRow();
             if (rowSel == -1) {
@@ -635,8 +606,20 @@ public class NewJFrame extends javax.swing.JFrame {
             } else {
                 DefaultTableModel model = (DefaultTableModel) tblRegister.getModel();
                 vId = (String) model.getValueAt(rowSel, 0);
+                String vSQL = "DELETE from operations WHERE id='" + vId + "'";
+                try {
+                    PreparedStatement pst = cn.prepareStatement(vSQL);
+                    int n = pst.executeUpdate();
+                    if (n > 0) {
+                        JOptionPane.showMessageDialog(null, "Eliminación satisfactoria");
+                        queryOperations();
+                    }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex);
+                }
+                System.out.println(vId);
             }
-        } catch (Exception ex){
+        } catch (HeadlessException ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
     }//GEN-LAST:event_iteEliminarActionPerformed
@@ -693,7 +676,6 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnDiv;
     private javax.swing.JButton btnDot;
-    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnIgual;
     private javax.swing.JButton btnMenos;
     private javax.swing.JButton btnMult;
