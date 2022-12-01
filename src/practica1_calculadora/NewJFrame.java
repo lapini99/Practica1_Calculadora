@@ -207,7 +207,7 @@ public class NewJFrame extends javax.swing.JFrame {
         });
 
         btn1.setBackground(new java.awt.Color(255, 255, 255));
-        btn1.setText("1");
+        btn1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/practica1_calculadora/images/CalcNumButton.png"))); // NOI18N
         btn1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn1ActionPerformed(evt);
@@ -325,7 +325,6 @@ public class NewJFrame extends javax.swing.JFrame {
                         .addComponent(btn8, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btn9, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(etiResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -358,7 +357,11 @@ public class NewJFrame extends javax.swing.JFrame {
                             .addComponent(btnMenos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnSum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnMult, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addGap(50, 50, 50))
+                .addGap(83, 83, 83))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(etiResultado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -509,6 +512,10 @@ public class NewJFrame extends javax.swing.JFrame {
         } else {
             System.out.println("Inserte un string válido");
             return false;}
+    }
+    
+    private void empyString(){
+        String text = etiResultado.getText();
     }
     
     private void InsertSQL() {
