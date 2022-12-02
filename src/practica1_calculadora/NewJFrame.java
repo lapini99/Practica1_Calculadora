@@ -473,6 +473,9 @@ public class NewJFrame extends javax.swing.JFrame {
         }
     }
     
+    private void concatenateOperations(){ //try catch bool
+        
+    }
     
     private void resetColor() {
         etiResultado.setOpaque(false);
@@ -647,6 +650,9 @@ public class NewJFrame extends javax.swing.JFrame {
                 total = firstNum / secondNum;
                 totalResult = String.valueOf(total);
                 break;
+            case "%":
+                total = (firstNum * 100)/secondNum;
+                totalResult = String.valueOf(total);
         }
         etiResultado.setText(totalResult);
         InsertSQL();
@@ -710,7 +716,11 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_iteEliminarActionPerformed
 
     private void btnPorcentajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPorcentajeActionPerformed
-        
+       emptyString();
+       firstNum = Double.parseDouble(etiResultado.getText());
+       etiResultado.setText("");
+       operator = "%";
+       resetColor();
     }//GEN-LAST:event_btnPorcentajeActionPerformed
 
     private void btnRefrescarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefrescarActionPerformed
