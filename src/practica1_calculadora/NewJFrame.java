@@ -13,15 +13,16 @@ import practica1_calculadora.circleButton.CircleButtonOrange;
 
 import java.awt.Color;
 import java.awt.HeadlessException;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 import practica1_calculadora.circleButton.CircleButtonGrey;
 
@@ -30,21 +31,27 @@ import practica1_calculadora.circleButton.CircleButtonGrey;
  * @author alela
  */
 public class NewJFrame extends javax.swing.JFrame {
-   
+    
+    ImageIcon img = new ImageIcon("/src/practica1_calculadora/images/iconCalc.png");
+
     private double firstNum;
     private double secondNum;
     private double total;
     
+    private boolean isOperating = false;
     private String operator;
     private String totalResult;
     
     String SQL = new String();
     DefaultTableModel model;
     String[] register = new String[3];
+    
+    
             
     public NewJFrame() {
         initComponents();
         queryOperations();
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(NewJFrame.class.getResource("/practica1_calculadora/images/iconCalc.png")));
     }
 
     /**
@@ -370,13 +377,13 @@ public class NewJFrame extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btn6, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnPorcentaje, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnPorcentaje, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnBorrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(btn1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
@@ -448,6 +455,7 @@ public class NewJFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
     public void queryOperations() {
         String[] operations = {"ID", "FECHA", "OPERACION"};
         model = new DefaultTableModel(null, operations);
@@ -473,8 +481,8 @@ public class NewJFrame extends javax.swing.JFrame {
         }
     }
     
-    private void concatenateOperations(){ //try catch bool
-        
+    public boolean Operating(){ //mira si se está realizando una operación
+        return isOperating = true;
     }
     
     private void resetColor() {
@@ -549,25 +557,28 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void btnSumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSumActionPerformed
        emptyString();
+       operator = "+";
+       Operating();
        firstNum = Double.parseDouble(etiResultado.getText());
        etiResultado.setText("");
-       operator = "+";
        resetColor();
     }//GEN-LAST:event_btnSumActionPerformed
 
     private void btnMenosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenosActionPerformed
        emptyString();
+       operator = "-";
+       Operating();
        firstNum = Double.parseDouble(etiResultado.getText());
        etiResultado.setText("");
-       operator = "-";
        resetColor();
     }//GEN-LAST:event_btnMenosActionPerformed
 
     private void btnMultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultActionPerformed
        emptyString();
+       operator = "x";
+       Operating();
        firstNum = Double.parseDouble(etiResultado.getText());
        etiResultado.setText("");
-       operator = "x";
        resetColor();
     }//GEN-LAST:event_btnMultActionPerformed
 
@@ -629,7 +640,8 @@ public class NewJFrame extends javax.swing.JFrame {
         }
     }
     
-    private void btnIgualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIgualActionPerformed
+    
+    private void calculate(){
         ValidateString();
         emptyString();
         secondNum = Double.parseDouble(etiResultado.getText());
@@ -651,11 +663,15 @@ public class NewJFrame extends javax.swing.JFrame {
                 totalResult = String.valueOf(total);
                 break;
             case "%":
-                total = (firstNum * 100)/secondNum;
+                total = (firstNum / 100) * secondNum;
                 totalResult = String.valueOf(total);
         }
         etiResultado.setText(totalResult);
         InsertSQL();
+    }     
+    
+    private void btnIgualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIgualActionPerformed
+        calculate();
     }//GEN-LAST:event_btnIgualActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
@@ -663,6 +679,7 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        emptyString();
         String result; //borra el último caracter del String
         String text = etiResultado.getText();
         if(text.length() > 0) {
@@ -717,6 +734,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void btnPorcentajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPorcentajeActionPerformed
        emptyString();
+       isOperating = true;
        firstNum = Double.parseDouble(etiResultado.getText());
        etiResultado.setText("");
        operator = "%";
