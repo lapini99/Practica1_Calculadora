@@ -5,23 +5,33 @@
 package practica1_calculadora;
 
 import BaseDatos.ConexionMySQL;
+import practica1_calculadora.circleButton.CircleButton;
+//import practica1_Calculadora.circleButton.CircleButtonOrange;
+
 import com.mysql.jdbc.Statement;
+import practica1_calculadora.circleButton.CircleButtonOrange;
+
+import java.awt.Color;
 import java.awt.HeadlessException;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+import practica1_calculadora.circleButton.CircleButtonGrey;
 
 /**
  *
  * @author alela
  */
 public class NewJFrame extends javax.swing.JFrame {
-   
+
     private double firstNum;
     private double secondNum;
     private double total;
@@ -32,10 +42,11 @@ public class NewJFrame extends javax.swing.JFrame {
     String SQL = new String();
     DefaultTableModel model;
     String[] register = new String[3];
-            
+          
     public NewJFrame() {
         initComponents();
         queryOperations();
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(NewJFrame.class.getResource("/practica1_calculadora/images/iconCalc.png")));
     }
 
     /**
@@ -50,34 +61,39 @@ public class NewJFrame extends javax.swing.JFrame {
         dialogoBD = new javax.swing.JDialog();
         JScrollPane1 = new javax.swing.JScrollPane();
         tblRegister = new javax.swing.JTable();
-        btnRefrescar = new javax.swing.JButton();
+        btnRefrescar = new CircleButtonOrange("⟳");
+        btnEliminarTodo = new CircleButtonOrange("⟳");
         mnuEditar = new javax.swing.JPopupMenu();
         iteEliminar = new javax.swing.JMenuItem();
-        etiResultado = new javax.swing.JLabel();
-        btn9 = new javax.swing.JButton();
-        btn7 = new javax.swing.JButton();
-        btn8 = new javax.swing.JButton();
-        btn6 = new javax.swing.JButton();
-        btn4 = new javax.swing.JButton();
-        btn5 = new javax.swing.JButton();
-        btn0 = new javax.swing.JButton();
-        btn00 = new javax.swing.JButton();
-        btn3 = new javax.swing.JButton();
-        btn1 = new javax.swing.JButton();
-        btn2 = new javax.swing.JButton();
-        btnDot = new javax.swing.JButton();
-        btnMenos = new javax.swing.JButton();
-        btnDiv = new javax.swing.JButton();
-        btnMult = new javax.swing.JButton();
-        btnIgual = new javax.swing.JButton();
-        btnSum = new javax.swing.JButton();
-        btnBorrar = new javax.swing.JButton();
-        btnReset = new javax.swing.JButton();
+        etiResultado = new javax.swing.JLabel("", SwingConstants.RIGHT);
+        btn9 = new CircleButton("9");
+        btn7 = new CircleButton("7");
+        btn8 = new CircleButton("8");
+        btn6 = new CircleButton("6");
+        btn4 = new CircleButton("4");
+        btn5 = new CircleButton("5");
+        btn0 = new CircleButton("0");
+        btn00 = new CircleButton("00");
+        btn3 = new CircleButton("3");
+        btn1 = new CircleButton("1");
+        btn2 = new CircleButton("2");
+        btnDot = new CircleButton(",");
+        btnMenos = new CircleButtonGrey("-");
+        btnDiv = new CircleButtonGrey("Dividir");
+        btnMult = new CircleButtonGrey("X");
+        btnIgual = new CircleButtonOrange("=");
+        btnSum = new CircleButtonGrey("+");
+        btnBorrar = new CircleButtonGrey("C");
+        btnReset = new CircleButtonGrey("CE");
+        btnPorcentaje = new CircleButtonGrey("C");
         barraMenus = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
         menuItemSalir = new javax.swing.JMenuItem();
         menuBD = new javax.swing.JMenu();
         menuItemHistorial = new javax.swing.JMenuItem();
+
+        JScrollPane1.setBorder(null);
+        JScrollPane1.setForeground(new java.awt.Color(204, 204, 204));
 
         tblRegister.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -100,27 +116,38 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
 
+        btnEliminarTodo.setText("Eliminar");
+        btnEliminarTodo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarTodoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout dialogoBDLayout = new javax.swing.GroupLayout(dialogoBD.getContentPane());
         dialogoBD.getContentPane().setLayout(dialogoBDLayout);
         dialogoBDLayout.setHorizontalGroup(
             dialogoBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dialogoBDLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(JScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                .addComponent(JScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(dialogoBDLayout.createSequentialGroup()
-                .addGap(156, 156, 156)
-                .addComponent(btnRefrescar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(67, 67, 67)
+                .addComponent(btnRefrescar, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnEliminarTodo, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(58, 58, 58))
         );
         dialogoBDLayout.setVerticalGroup(
             dialogoBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dialogoBDLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(JScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
-                .addGap(27, 27, 27)
-                .addComponent(btnRefrescar)
-                .addGap(29, 29, 29))
+                .addGap(18, 18, 18)
+                .addGroup(dialogoBDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRefrescar, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEliminarTodo, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38))
         );
 
         iteEliminar.setText("Eliminar");
@@ -133,6 +160,8 @@ public class NewJFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(153, 153, 153));
+
+        etiResultado.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
 
         btn9.setBackground(new java.awt.Color(255, 255, 255));
         btn9.setText("9");
@@ -208,6 +237,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         btn1.setBackground(new java.awt.Color(255, 255, 255));
         btn1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/practica1_calculadora/images/CalcNumButton.png"))); // NOI18N
+        btn1.setText("1");
         btn1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn1ActionPerformed(evt);
@@ -231,7 +261,7 @@ public class NewJFrame extends javax.swing.JFrame {
         });
 
         btnMenos.setBackground(new java.awt.Color(204, 204, 204));
-        btnMenos.setText("Restar");
+        btnMenos.setText("-");
         btnMenos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMenosActionPerformed(evt);
@@ -239,7 +269,7 @@ public class NewJFrame extends javax.swing.JFrame {
         });
 
         btnDiv.setBackground(new java.awt.Color(204, 204, 204));
-        btnDiv.setLabel("Dividir");
+        btnDiv.setText("÷");
         btnDiv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDivActionPerformed(evt);
@@ -247,7 +277,7 @@ public class NewJFrame extends javax.swing.JFrame {
         });
 
         btnMult.setBackground(new java.awt.Color(204, 204, 204));
-        btnMult.setText("Multiplicar");
+        btnMult.setText("X");
         btnMult.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMultActionPerformed(evt);
@@ -255,7 +285,7 @@ public class NewJFrame extends javax.swing.JFrame {
         });
 
         btnIgual.setBackground(new java.awt.Color(255, 153, 51));
-        btnIgual.setText("Igual");
+        btnIgual.setText("=");
         btnIgual.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIgualActionPerformed(evt);
@@ -263,7 +293,7 @@ public class NewJFrame extends javax.swing.JFrame {
         });
 
         btnSum.setBackground(new java.awt.Color(204, 204, 204));
-        btnSum.setText("Sumar");
+        btnSum.setText("+");
         btnSum.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSumActionPerformed(evt);
@@ -271,7 +301,7 @@ public class NewJFrame extends javax.swing.JFrame {
         });
 
         btnBorrar.setBackground(new java.awt.Color(204, 204, 204));
-        btnBorrar.setText("Borrar");
+        btnBorrar.setText("⌫");
         btnBorrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBorrarActionPerformed(evt);
@@ -286,7 +316,20 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
 
+        btnPorcentaje.setBackground(new java.awt.Color(204, 204, 204));
+        btnPorcentaje.setText("%");
+        btnPorcentaje.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPorcentajeActionPerformed(evt);
+            }
+        });
+
+        barraMenus.setBackground(new java.awt.Color(204, 204, 204));
+        barraMenus.setForeground(new java.awt.Color(204, 204, 204));
+        barraMenus.setFont(new java.awt.Font("Roboto Black", 0, 12)); // NOI18N
+
         menuArchivo.setText("Archivo");
+        menuArchivo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         menuItemSalir.setText("Salir");
         menuItemSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -317,50 +360,52 @@ public class NewJFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(etiResultado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btn4, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btn5, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btn6, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnPorcentaje, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnBorrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btn1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btn2, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btn3, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btn0, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btn00, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnDot, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnIgual, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDiv, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnMenos, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSum, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnMult, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(btn7, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btn8, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btn9, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(btn4, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(btn5, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btn6, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(btn1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(btn2, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(btn3, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btn0, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btn00, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnDot, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(40, 40, 40)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnIgual, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnDiv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnMenos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnSum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnMult, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addGap(83, 83, 83))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(etiResultado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn9, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -371,8 +416,9 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDiv, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPorcentaje, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -404,7 +450,8 @@ public class NewJFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void queryOperations() {
+
+    public void queryOperations() {  //Hace una consulta a la db. Recoge los objetos de la db y los inserta en una tabla
         String[] operations = {"ID", "FECHA", "OPERACION"};
         model = new DefaultTableModel(null, operations);
         ConexionMySQL cc = new ConexionMySQL();
@@ -428,77 +475,107 @@ public class NewJFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, ex);
         }
     }
+    
+    private void resetColor() { //reinicia el color de la etiqueta
+        etiResultado.setOpaque(false);
+    }
+    
+    private void errorColor() { //cambia la etiqueta de color si hay un error
+        etiResultado.setOpaque(true);
+        etiResultado.setBackground(Color.red);
+    }
+    
     private void btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn1ActionPerformed
-
+        btn1.setBackground(Color.white); ; 
         etiResultado.setText(etiResultado.getText() + "1");
+        resetColor();
     }//GEN-LAST:event_btn1ActionPerformed
 
     private void btn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn2ActionPerformed
         etiResultado.setText(etiResultado.getText() + "2");
+        resetColor();
     }//GEN-LAST:event_btn2ActionPerformed
 
     private void btn3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn3ActionPerformed
         etiResultado.setText(etiResultado.getText() + "3");
+        resetColor();
     }//GEN-LAST:event_btn3ActionPerformed
 
     private void btn4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn4ActionPerformed
         etiResultado.setText(etiResultado.getText() + "4");
+        resetColor();
     }//GEN-LAST:event_btn4ActionPerformed
 
     private void btn5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn5ActionPerformed
         etiResultado.setText(etiResultado.getText() + "5");
+        resetColor();
     }//GEN-LAST:event_btn5ActionPerformed
 
     private void btn6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn6ActionPerformed
         etiResultado.setText(etiResultado.getText() + "6");
+        resetColor();
     }//GEN-LAST:event_btn6ActionPerformed
 
     private void btn7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn7ActionPerformed
         etiResultado.setText(etiResultado.getText() + "7");
+        resetColor();
     }//GEN-LAST:event_btn7ActionPerformed
 
     private void btn8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn8ActionPerformed
         etiResultado.setText(etiResultado.getText() + "8");
+        resetColor();
     }//GEN-LAST:event_btn8ActionPerformed
 
     private void btn9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn9ActionPerformed
         etiResultado.setText(etiResultado.getText() + "9");
+        resetColor();
     }//GEN-LAST:event_btn9ActionPerformed
 
     private void btn0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn0ActionPerformed
         etiResultado.setText(etiResultado.getText() + "0");
+        resetColor();
     }//GEN-LAST:event_btn0ActionPerformed
 
     private void btn00ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn00ActionPerformed
         etiResultado.setText(etiResultado.getText() + "00");
+        resetColor();
     }//GEN-LAST:event_btn00ActionPerformed
 
     private void btnDotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDotActionPerformed
         etiResultado.setText(etiResultado.getText() + ".");
+        resetColor();
     }//GEN-LAST:event_btnDotActionPerformed
 
     private void btnSumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSumActionPerformed
+       emptyString();
+       operator = "+";
        firstNum = Double.parseDouble(etiResultado.getText());
        etiResultado.setText("");
-       operator = "+";
+       resetColor();
     }//GEN-LAST:event_btnSumActionPerformed
 
     private void btnMenosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenosActionPerformed
+       emptyString();
+       operator = "-";
        firstNum = Double.parseDouble(etiResultado.getText());
        etiResultado.setText("");
-       operator = "-";
+       resetColor();
     }//GEN-LAST:event_btnMenosActionPerformed
 
     private void btnMultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultActionPerformed
+       emptyString();
+       operator = "x";
        firstNum = Double.parseDouble(etiResultado.getText());
        etiResultado.setText("");
-       operator = "x";
+       resetColor();
     }//GEN-LAST:event_btnMultActionPerformed
 
     private void btnDivActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDivActionPerformed
+       emptyString();
        firstNum = Double.parseDouble(etiResultado.getText());
        etiResultado.setText("");
        operator = "÷";
+       resetColor();
     }//GEN-LAST:event_btnDivActionPerformed
 
     private boolean ValidateString() {
@@ -511,14 +588,19 @@ public class NewJFrame extends javax.swing.JFrame {
         return true;
         } else {
             System.out.println("Inserte un string válido");
+            errorColor();
             return false;}
     }
     
-    private void empyString(){
+    private void emptyString(){ //mira si la etiqueta está vacia. Si está vacía escribe error en la etiqueta.
         String text = etiResultado.getText();
+        if (text.isEmpty()) {
+        etiResultado.setText("Error");
+        errorColor();
+        }
     }
     
-    private void InsertSQL() {
+    private void InsertSQL() { //inserta datos en la db
         ConexionMySQL cc = new ConexionMySQL();
         Connection cn = cc.connect();
         
@@ -537,7 +619,8 @@ public class NewJFrame extends javax.swing.JFrame {
          
             int n = pst.executeUpdate();
             if (n > 0) {
-                JOptionPane.showMessageDialog(null, "Inserción satisfactoria");
+                etiResultado.setOpaque(true);
+                etiResultado.setBackground(Color.green.brighter());
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
@@ -545,8 +628,10 @@ public class NewJFrame extends javax.swing.JFrame {
         }
     }
     
-    private void btnIgualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIgualActionPerformed
+    
+    private void calculate(){ //funcion para realizar los calculos
         ValidateString();
+        emptyString();
         secondNum = Double.parseDouble(etiResultado.getText());
         switch(operator) {  //maquina de estados que realiza un cálculo u otro segun el valor de operator
             case "+":
@@ -565,9 +650,16 @@ public class NewJFrame extends javax.swing.JFrame {
                 total = firstNum / secondNum;
                 totalResult = String.valueOf(total);
                 break;
+            case "%":
+                total = (firstNum / 100) * secondNum;
+                totalResult = String.valueOf(total);
         }
         etiResultado.setText(totalResult);
         InsertSQL();
+    }     
+    
+    private void btnIgualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIgualActionPerformed
+        calculate();
     }//GEN-LAST:event_btnIgualActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
@@ -575,6 +667,7 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        emptyString(); 
         String result; //borra el último caracter del String
         String text = etiResultado.getText();
         if(text.length() > 0) {
@@ -590,17 +683,13 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemSalirActionPerformed
 
     private void menuItemHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemHistorialActionPerformed
-        dialogoBD.setSize(500,500);
+        dialogoBD.setSize(500,500); //crea una nueva ventana JDialog 
         dialogoBD.setLocation(100, 100);
         dialogoBD.setVisible(true);
     }//GEN-LAST:event_menuItemHistorialActionPerformed
 
-    private void btnRefrescarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefrescarActionPerformed
-        queryOperations();
-    }//GEN-LAST:event_btnRefrescarActionPerformed
-
     private void iteEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iteEliminarActionPerformed
-        ConexionMySQL cc = new ConexionMySQL();
+        ConexionMySQL cc = new ConexionMySQL(); //elimina una fila de la base de datos
         Connection cn = cc.connect();
 
         int rowSel;
@@ -630,6 +719,33 @@ public class NewJFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, ex);
         }
     }//GEN-LAST:event_iteEliminarActionPerformed
+
+    private void btnPorcentajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPorcentajeActionPerformed
+       emptyString();
+       firstNum = Double.parseDouble(etiResultado.getText());
+       etiResultado.setText("");
+       operator = "%";
+       resetColor();
+    }//GEN-LAST:event_btnPorcentajeActionPerformed
+
+    private void btnRefrescarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefrescarActionPerformed
+        queryOperations(); //recarga la tabla que contiene la db
+    }//GEN-LAST:event_btnRefrescarActionPerformed
+
+    private void btnEliminarTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarTodoActionPerformed
+        ConexionMySQL cc = new ConexionMySQL(); //elimina todos los datos de la db
+        Connection cn = cc.connect();
+        
+        String vSQL = "TRUNCATE TABLE operations";
+        
+        try {
+            PreparedStatement pst = cn.prepareStatement(vSQL);
+            pst.execute();
+            queryOperations();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }//GEN-LAST:event_btnEliminarTodoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -683,9 +799,11 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnDiv;
     private javax.swing.JButton btnDot;
+    private javax.swing.JButton btnEliminarTodo;
     private javax.swing.JButton btnIgual;
     private javax.swing.JButton btnMenos;
     private javax.swing.JButton btnMult;
+    private javax.swing.JButton btnPorcentaje;
     private javax.swing.JButton btnRefrescar;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSum;

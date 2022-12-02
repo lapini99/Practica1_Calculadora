@@ -10,7 +10,7 @@ package BaseDatos;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
-    public class ConexionMySQL {
+    public class ConexionMySQL { //variables para conectarse a la db
     public String bd = "calculadoralapini";
     public String login = "root";
     public String password = "";
@@ -21,7 +21,6 @@ import javax.swing.JOptionPane;
         try {
             Class.forName("com.mysql.jdbc.Driver");
             link = DriverManager.getConnection(this.url, this.login, this.password);
-           // JOptionPane.showMessageDialog(null ,"Conexión establecida");
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null , e);
