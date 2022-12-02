@@ -89,6 +89,10 @@ Sobre el cuadro de botones el usuario verá los datos que está introduciendo. C
 
 En la parte superior tenemos la barra de tareas. En ella el usuario puede hacer click en las dos opciones mostradas en la imagen. Si hace click en ***Archivo*** de desplegará un menú con la opción ***Salir***. Al hacer click en ***Base de Datos*** se desplegaré un menú con la opción ***Historial***. Al hacer click en Historial se nos barirá una nueva ventana en la que veremos nuuestra base de datos. También podemos interactuar con ella. Al hacer click derecho sobre una fila podemos eliminar esa entrada. Al hacer click en refrescar actualizaremos la tabla que vemos. Y, por último, al hacer click en **Eliminar Registro** borraremos el historial al completo.
 
+He elegido la paleta de color: *NARANJA* y *tonalidades de BLANCO* ya que son colores fáciles de distinguir y no son molestos a la vista. Son colores cálidos y agradables a la vista, sin cambios drásticos que desconcentren al usuario y que le ahagn olvidar "por qué ha abierto la calculadora".
+
+![paleta](./images/paleta.png)
+
 ### ***Prototipo***
 
 Un prototipo es un modelo (representación, demostración o simulación) fácilmente ampliable y
@@ -479,7 +483,7 @@ Expliación de los tres campos:
 - **date** va a guardar la fecha en la que se ha realizado la operación. No puede ser null y coge la hora local a la que se sube a la base de datos - ***current_timestamp()***.
 - **operation** es el resultado de la operación realizada. Es un varchar ya que va a guardar la operación completa, incluyendo símbolos.
 
-## Problemas
+## **Problemas**
 
 Al principio planteé el desarrollo de la calculadora con expresiones regulares. Así lo documenté al principio. 
 
