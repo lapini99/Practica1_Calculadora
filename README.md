@@ -251,7 +251,7 @@ La función **ValidateString()** verifica mediante una expresión regular si el 
             return false;}
     }
 ```
-La función **calculate()** llama a las funciones ValidateString() y emptyString(). Si está todo validado recoger los datos actuales que hay en el label y los parsea a un double en la variable seconNum. Creo un switch que selecciona un case u otro según el valor de la variable operador. Una vez finalizada la operación escribe el resultado en la etiqueta y lo inserta en la base de datos. 
+La función **calculate()** llama a las funciones ValidateString() y emptyString(). Si está todo validado recoger los datos actuales que hay en el label y los parsea a un double en la variable seconNum. Creo un switch que selecciona un case u otro según el valor de la variable operador. Una vez finalizada la operación escribe el resultado en la etiqueta y lo inserta en la base de datos. Dicha operación la llevará acabo el actionPerformed del botón igual.
 
 ``` java
 private void calculate(){ //funcion para realizar los calculos
@@ -283,8 +283,188 @@ private void calculate(){ //funcion para realizar los calculos
         InsertSQL();
     } 
 ```
-### ***Estética***
+La función **InserSQL()** inserta el total de la operación anterior en la base de datos. Los valores de la id y date son null ya que configuré la base de datos para que la id fuera auto incremental y la fecha fuera un current time.
 
-Creo un pkg
+``` java
+    private void InsertSQL() { //inserta datos en la db
+        ConexionMySQL cc = new ConexionMySQL();
+        Connection cn = cc.connect();
+        
+        String vId = null; //le asigno el valor null ya que la db lo rellena automaticamente
+        String vDate = null; //le asigno el valor null ya que la db lo rellena automaticamente
+        String vResult = String.valueOf(firstNum) + operator + String.valueOf(secondNum) + " = " + etiResultado.getText(); //string que se va a insertar en la col resultado
+        
+        String SQL = "INSERT INTO operations(id, date, operation) VALUES (?, ?, ?)"; //comando SQL
+        
+        try {
+            PreparedStatement pst = cn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+            
+            pst.setString(1, vId);
+            pst.setString(2, vDate);
+            pst.setString(3, vResult);
+         
+            int n = pst.executeUpdate();
+            if (n > 0) {
+                etiResultado.setOpaque(true);
+                etiResultado.setBackground(Color.green.brighter());
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+            System.out.println(ex);
+        }
+    
+```
+La función **iteEliminarActionPerformed(java.awt.event.ActionEvent evt)** elimina la fila de la base de datos que el usuario desee. Con click derecho activa el popUp con la opción "eliminar".
+``` java
+private void iteEliminarActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        ConexionMySQL cc = new ConexionMySQL(); //elimina una fila de la base de datos
+        Connection cn = cc.connect();
+
+        int rowSel;
+        String vId;
+
+        try {
+            rowSel = tblRegister.getSelectedRow();
+            if (rowSel == -1) {
+                JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila");
+            } else {
+                DefaultTableModel model = (DefaultTableModel) tblRegister.getModel();
+                vId = (String) model.getValueAt(rowSel, 0);
+                String vSQL = "DELETE from operations WHERE id='" + vId + "'";
+                try {
+                    PreparedStatement pst = cn.prepareStatement(vSQL);
+                    int n = pst.executeUpdate();
+                    if (n > 0) {
+                        JOptionPane.showMessageDialog(null, "Eliminación satisfactoria");
+                        queryOperations();
+                    }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex);
+                }
+                System.out.println(vId);
+            }
+        } catch (HeadlessException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }      
+```
+La función **btnEliminarTodoActionPerformed(java.awt.event.ActionEvent evt)** elimina todo el contenido de la base de datos.
+
+``` java
+  private void btnEliminarTodoActionPerformed(java.awt.event.ActionEvent evt) {
+        ConexionMySQL cc = new ConexionMySQL(); //elimina todos los datos de la db
+        Connection cn = cc.connect();
+        
+        String vSQL = "TRUNCATE TABLE operations";
+        
+        try {
+            PreparedStatement pst = cn.prepareStatement(vSQL);
+            pst.execute();
+            queryOperations();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+```
 
 ![pkg](./images/pkgCircleBtn.png)
+
+En el package circleButton tengo las clases que modifican las propiedas del JButton para así poder hacerlo redondo y darle color. He tenido que crear una clase por cada color que he querido añadir. El código es de la web [happycoding](https://happycoding.io/tutorials/java/swing/circle-button).
+
+``` java
+public class CircleButton extends JButton{
+
+	private boolean mouseOver = false;
+	private boolean mousePressed = false;
+
+	public CircleButton(String text){
+		super(text);
+		setOpaque(false);
+		setFocusPainted(false);
+		setBorderPainted(false);
+
+		MouseAdapter mouseListener = new MouseAdapter(){
+
+			@Override
+			public void mousePressed(MouseEvent me){
+				if(contains(me.getX(), me.getY())){
+					mousePressed = true;
+					repaint();
+				}
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent me){
+				mousePressed = false;
+				repaint();
+			}
+
+			@Override
+			public void mouseExited(MouseEvent me){
+				mouseOver = false;
+				mousePressed = false;
+				repaint();
+			}
+
+			@Override
+			public void mouseMoved(MouseEvent me){
+				mouseOver = contains(me.getX(), me.getY());
+				repaint();
+			}
+		};
+
+		addMouseListener(mouseListener);
+		addMouseMotionListener(mouseListener);		
+	}
+
+	private int getDiameter(){
+		int diameter = Math.min(getWidth(), getHeight());
+		return diameter;
+	}
+
+	@Override
+	public Dimension getPreferredSize(){
+		FontMetrics metrics = getGraphics().getFontMetrics(getFont());
+		int minDiameter = 10 + Math.max(metrics.stringWidth(getText()), metrics.getHeight());
+		return new Dimension(minDiameter, minDiameter);
+	}
+
+	@Override
+	public boolean contains(int x, int y){
+		int radius = getDiameter()/2;
+		return Point2D.distance(x, y, getWidth()/2, getHeight()/2) < radius;
+	}
+
+	@Override
+	public void paintComponent(Graphics g){
+
+		int diameter = getDiameter();
+		int radius = diameter/2;
+
+		if(mousePressed){
+			g.setColor(Color.GRAY);
+		}
+		else{
+			g.setColor(Color.WHITE);
+		}
+		g.fillOval(getWidth()/2 - radius, getHeight()/2 - radius, diameter, diameter);
+
+		if(mouseOver){
+			g.setColor(Color.LIGHT_GRAY);
+		}
+		else{
+			g.setColor(Color.WHITE);
+		}
+		g.drawOval(getWidth()/2 - radius, getHeight()/2 - radius, diameter, diameter);
+
+		g.setColor(Color.white.darker());
+		g.setFont(getFont());
+		FontMetrics metrics = g.getFontMetrics(getFont());
+		int stringWidth = metrics.stringWidth(getText());
+		int stringHeight = metrics.getHeight();
+		g.drawString(getText(), getWidth()/2 - stringWidth/2, getHeight()/2 + stringHeight/4);
+	}
+}
+```
+
+## **Base de Datos**
