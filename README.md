@@ -87,4 +87,7 @@ La página principal de la aplicación es la calculadora. El usuario dispondrá 
 
 Sobre el cuadro de botones el usuario verá los datos que está introduciendo. Cuando inserté un operador la pantalla se pondrá en blanco, permitiendo así insertar el otro valor deseado en el cálculo.
 
-En la parte superior tenemos la barra de tareas. En ella el usuario puede hacer click en las dos opciones mostradas en la imagen. Si hace click en ***Archivo*** de desplegará un menú con la opción ***Salir***. Al hacer click en Base de Datos.
+En la parte superior tenemos la barra de tareas. En ella el usuario puede hacer click en las dos opciones mostradas en la imagen. Si hace click en ***Archivo*** de desplegará un menú con la opción ***Salir***. Al hacer click en ***Base de Datos*** se desplegaré un menú con la opción ***Historial***. Al hacer click en Historial se nos barirá una nueva ventana en la que veremos nuuestra base de datos. También podemos interactuar con ella. Al hacer click derecho sobre una fila podemos eliminar esa entrada. Al hacer click en refrescar actualizaremos la tabla que vemos. Y, por último, al hacer click en **Eliminar Registro** borraremos el historial al completo.
+
+### ***Prototipo***
+
