@@ -31,23 +31,18 @@ import practica1_calculadora.circleButton.CircleButtonGrey;
  * @author alela
  */
 public class NewJFrame extends javax.swing.JFrame {
-    
-    ImageIcon img = new ImageIcon("/src/practica1_calculadora/images/iconCalc.png");
 
     private double firstNum;
     private double secondNum;
     private double total;
     
-    private boolean isOperating = false;
     private String operator;
     private String totalResult;
     
     String SQL = new String();
     DefaultTableModel model;
     String[] register = new String[3];
-    
-    
-            
+          
     public NewJFrame() {
         initComponents();
         queryOperations();
@@ -456,7 +451,7 @@ public class NewJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
 
-    public void queryOperations() {
+    public void queryOperations() {  //Hace una consulta a la db. Recoge los objetos de la db y los inserta en una tabla
         String[] operations = {"ID", "FECHA", "OPERACION"};
         model = new DefaultTableModel(null, operations);
         ConexionMySQL cc = new ConexionMySQL();
@@ -481,15 +476,11 @@ public class NewJFrame extends javax.swing.JFrame {
         }
     }
     
-    public boolean Operating(){ //mira si se está realizando una operación
-        return isOperating = true;
-    }
-    
-    private void resetColor() {
+    private void resetColor() { //reinicia el color de la etiqueta
         etiResultado.setOpaque(false);
     }
     
-    private void errorColor() {
+    private void errorColor() { //cambia la etiqueta de color si hay un error
         etiResultado.setOpaque(true);
         etiResultado.setBackground(Color.red);
     }
@@ -558,7 +549,6 @@ public class NewJFrame extends javax.swing.JFrame {
     private void btnSumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSumActionPerformed
        emptyString();
        operator = "+";
-       Operating();
        firstNum = Double.parseDouble(etiResultado.getText());
        etiResultado.setText("");
        resetColor();
@@ -567,7 +557,6 @@ public class NewJFrame extends javax.swing.JFrame {
     private void btnMenosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenosActionPerformed
        emptyString();
        operator = "-";
-       Operating();
        firstNum = Double.parseDouble(etiResultado.getText());
        etiResultado.setText("");
        resetColor();
@@ -576,7 +565,6 @@ public class NewJFrame extends javax.swing.JFrame {
     private void btnMultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultActionPerformed
        emptyString();
        operator = "x";
-       Operating();
        firstNum = Double.parseDouble(etiResultado.getText());
        etiResultado.setText("");
        resetColor();
@@ -604,7 +592,7 @@ public class NewJFrame extends javax.swing.JFrame {
             return false;}
     }
     
-    private void emptyString(){
+    private void emptyString(){ //mira si la etiqueta está vacia. Si está vacía escribe error en la etiqueta.
         String text = etiResultado.getText();
         if (text.isEmpty()) {
         etiResultado.setText("Error");
@@ -612,7 +600,7 @@ public class NewJFrame extends javax.swing.JFrame {
         }
     }
     
-    private void InsertSQL() {
+    private void InsertSQL() { //inserta datos en la db
         ConexionMySQL cc = new ConexionMySQL();
         Connection cn = cc.connect();
         
@@ -641,7 +629,7 @@ public class NewJFrame extends javax.swing.JFrame {
     }
     
     
-    private void calculate(){
+    private void calculate(){ //funcion para realizar los calculos
         ValidateString();
         emptyString();
         secondNum = Double.parseDouble(etiResultado.getText());
@@ -679,7 +667,7 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
-        emptyString();
+        emptyString(); 
         String result; //borra el último caracter del String
         String text = etiResultado.getText();
         if(text.length() > 0) {
@@ -695,13 +683,13 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemSalirActionPerformed
 
     private void menuItemHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemHistorialActionPerformed
-        dialogoBD.setSize(500,500);
+        dialogoBD.setSize(500,500); //crea una nueva ventana JDialog 
         dialogoBD.setLocation(100, 100);
         dialogoBD.setVisible(true);
     }//GEN-LAST:event_menuItemHistorialActionPerformed
 
     private void iteEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iteEliminarActionPerformed
-        ConexionMySQL cc = new ConexionMySQL();
+        ConexionMySQL cc = new ConexionMySQL(); //elimina una fila de la base de datos
         Connection cn = cc.connect();
 
         int rowSel;
@@ -734,7 +722,6 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void btnPorcentajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPorcentajeActionPerformed
        emptyString();
-       isOperating = true;
        firstNum = Double.parseDouble(etiResultado.getText());
        etiResultado.setText("");
        operator = "%";
@@ -742,11 +729,11 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPorcentajeActionPerformed
 
     private void btnRefrescarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefrescarActionPerformed
-        queryOperations();
+        queryOperations(); //recarga la tabla que contiene la db
     }//GEN-LAST:event_btnRefrescarActionPerformed
 
     private void btnEliminarTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarTodoActionPerformed
-        ConexionMySQL cc = new ConexionMySQL();
+        ConexionMySQL cc = new ConexionMySQL(); //elimina todos los datos de la db
         Connection cn = cc.connect();
         
         String vSQL = "TRUNCATE TABLE operations";

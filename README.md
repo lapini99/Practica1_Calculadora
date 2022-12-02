@@ -91,3 +91,200 @@ En la parte superior tenemos la barra de tareas. En ella el usuario puede hacer 
 
 ### ***Prototipo***
 
+Un prototipo es un modelo (representación, demostración o simulación) fácilmente ampliable y
+modificable de un sistema planificado, probablemente incluyendo su interfaz y su funcionalidad de
+entradas y salidas.
+
+En este caso hice un prototipo con los botones standard de JSwing. Haciendo el código necesario para cumplir con la funcionalidad y navegación de la app.
+
+![prototipo](./images/prototipo.png)
+
+## **Código**
+
+Voy a explicar la estructura de directios del proyecto y cómo están organizados los archivos. Explicando también la funcionalidad del código que albergan dichas clases.
+
+![estructuraDirectios](./images/directorios.png)
+
+En el package **BaseDatos** tengo la clase ***ConexionMySQL.java***. Esta clase es la encargada de realizar la conexión a la Base de Datos.
+
+``` java
+package BaseDatos;
+
+import java.sql.*;
+import javax.swing.JOptionPane;
+
+    public class ConexionMySQL { //variables para conectarse a la db
+    public String bd = "calculadoralapini";
+    public String login = "root";
+    public String password = "";
+    public String url = "jdbc:mysql://localhost/" + bd;
+
+    public Connection connect() {
+        Connection link = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            link = DriverManager.getConnection(this.url, this.login, this.password);
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null , e);
+        }
+        return link;
+    }
+}
+```
+En el package **practica1_calculadora** encontramos lo siguiente:
+
+- Clase NewJFrame. Esta clase es la contenedora del código para hacer funcional el proyecto. Dentro están los botones con sus funcionalidades y otras funciones para realizar los cálculos. Explicaré las funciones más importante o clave, no todas ya que el código es extenso. 
+
+
+``` java
+import com.mysql.jdbc.Statement;
+import practica1_calculadora.circleButton.CircleButtonOrange;
+
+import java.awt.Color;
+import java.awt.HeadlessException;
+import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
+import practica1_calculadora.circleButton.CircleButtonGrey;
+
+/**
+ *
+ * @author alela
+ */
+public class NewJFrame extends javax.swing.JFrame {
+
+    private double firstNum; //primer numero para hacer los calculos
+    private double secondNum; //segundo numero para hacer los calculos
+    private double total; //total del calculo de firstNum y secondNum
+    
+    private String operator; //guarda el operador que se utiliza en la operacion
+    private String totalResult; //resultado total para el label
+    
+    String SQL = new String(); //variable para las futuras sentencias SQL
+    DefaultTableModel model; //tabla que contendrá los objetos de la db
+    String[] register = new String[3]; //las tres columnas de la tabla
+          
+    public NewJFrame() {
+        initComponents();
+        queryOperations();
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(NewJFrame.class.getResource("/practica1_calculadora/images/iconCalc.png"))); //cambia el icono de la app
+    }
+
+```
+La función **queryOperations()** hace una consulta a la base de datos. Recoge los objetos y los insertas en la tabla que hemos declarado antes.
+
+``` java
+public void queryOperations() {  //Hace una consulta a la db. Recoge los objetos de la db y los inserta en una tabla
+        String[] operations = {"ID", "FECHA", "OPERACION"};
+        model = new DefaultTableModel(null, operations);
+        ConexionMySQL cc = new ConexionMySQL();
+        Connection cn = (Connection) cc.connect();
+        
+        SQL = "SELECT id, date, operation from operations";
+        
+        try{
+            Statement st = (Statement) cn.createStatement();
+            ResultSet rs = st.executeQuery(SQL);
+            while(rs.next()) {
+                register[0] = rs.getString("id");
+                register[1] = rs.getString("date");
+                register[2] = rs.getString("operation");
+                model.addRow(register);
+            }
+       
+            tblRegister.setModel(model);
+        
+        }catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+```
+
+Los eventos **actionPerformed()** de los operadores siguen el mismo patrón. Al pulsar un botón operador asignamos a la variable operador el símbolo que hemos pulsado. Parseamos el texto a un double y borramos el texto para que el usuario puede insertar el segundo operador.
+
+``` java
+private void btnSumActionPerformed(java.awt.event.ActionEvent evt) {                                       
+       emptyString();
+       operator = "+";
+       firstNum = Double.parseDouble(etiResultado.getText());
+       etiResultado.setText("");
+       resetColor();
+    }
+```
+
+La función **emptyString()** mira si el texto del label está vacío. Hay que poner un número antes de usar un operador. Si no se ha insertado ningún número la calculadora dará Error por pantalla al usuario.
+
+``` java
+    private void emptyString(){ //mira si la etiqueta está vacia. Si está vacía escribe error en la etiqueta.
+        String text = etiResultado.getText();
+        if (text.isEmpty()) {
+        etiResultado.setText("Error");
+        errorColor();
+        }
+    }
+```
+![errorVacio](./images/emptyString.png)
+
+La función **ValidateString()** verifica mediante una expresión regular si el String que le hemos pasado a la calculadora es válido o no. Si no es válido la pantalla se pondrá en rojo.
+
+``` java
+    private boolean ValidateString() {
+        String regex = "^[\\d\\+\\/\\*\\.\\- \\(\\)]*$"; //regex valida que solo haya digitos y operandos
+        Pattern pat = Pattern.compile(regex);
+        Matcher mat = pat.matcher(etiResultado.getText());
+        
+        if(mat.find()) {
+        System.out.println("Expresión validada");
+        return true;
+        } else {
+            System.out.println("Inserte un string válido");
+            errorColor();
+            return false;}
+    }
+```
+La función **calculate()** llama a las funciones ValidateString() y emptyString(). Si está todo validado recoger los datos actuales que hay en el label y los parsea a un double en la variable seconNum. Creo un switch que selecciona un case u otro según el valor de la variable operador. Una vez finalizada la operación escribe el resultado en la etiqueta y lo inserta en la base de datos. 
+
+``` java
+private void calculate(){ //funcion para realizar los calculos
+        ValidateString();
+        emptyString();
+        secondNum = Double.parseDouble(etiResultado.getText());
+        switch(operator) {  //maquina de estados que realiza un cálculo u otro segun el valor de operator
+            case "+":
+                total = firstNum + secondNum;
+                totalResult = String.valueOf(total);
+                break;
+            case "-":
+                total = firstNum - secondNum;
+                totalResult = String.valueOf(total);
+                break;
+            case "x":
+                total = firstNum * secondNum;
+                totalResult = String.valueOf(total);
+                break;
+            case "÷":
+                total = firstNum / secondNum;
+                totalResult = String.valueOf(total);
+                break;
+            case "%":
+                total = (firstNum / 100) * secondNum;
+                totalResult = String.valueOf(total);
+        }
+        etiResultado.setText(totalResult);
+        InsertSQL();
+    } 
+```
+### ***Estética***
+
+Creo un pkg
+
+![pkg](./images/pkgCircleBtn.png)
