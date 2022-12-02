@@ -468,3 +468,27 @@ public class CircleButton extends JButton{
 ```
 
 ## **Base de Datos**
+
+La base de datos la lanzo en localhost con Xampp. Es una base de datos relacional mySQL. Para esta base de datos solo necesito una tabla.  
+
+![estructuraDB](./images/estructuraDb.png)
+
+Expliación de los tres campos:
+
+- La **id** es la ***PRIMARY KEY*** de esta tabla. No puede ser null y por cada objeto que se sube se auto incrementa.
+- **date** va a guardar la fecha en la que se ha realizado la operación. No puede ser null y coge la hora local a la que se sube a la base de datos - ***current_timestamp()***.
+- **operation** es el resultado de la operación realizada. Es un varchar ya que va a guardar la operación completa, incluyendo símbolos.
+
+## Problemas
+
+Al principio planteé el desarrollo de la calculadora con expresiones regulares. Así lo documenté al principio. 
+
+> Voy a utilizar expresiones regulares para realizar los cálculos. Con esta expresión capturo todo el string anterior al símbolo operador. El desarrollo de la calculadora utilizando expresiones regulares aumenta en gran manera el tiempo de desarrollo de la app.
+
+Al final pivoté y terminé utilizando las expresiones regulares para validar los datos de entrada.
+
+Me planteé también el uso de librerias Maven para así no tener que escribir código innecesario. Al buscar información ví que importar librerias Maven en Ant llevaría más tiempo que el desarrollo de alguna que otra función. Así que quedó descartado.
+
+También quise implementar mis botones propios hechos con Photoshop. No me gustaba el no poder hacer el botón completamente redondo, así que terminé haciendo los botones por código. 
+
+Por último he querido implementar la concatenación de operaciones. Al final no he podido hacerlo ya que me daba errores de cálculos. Una manera de hacerlo sería almacenando el input en un array y que, a la hora de calcular, se "iterase" el array para así poder concatenar. Esto habría supuesto modificar todo el código.
